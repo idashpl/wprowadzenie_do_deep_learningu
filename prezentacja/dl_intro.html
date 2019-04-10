@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Wprowadzenie do Deep Learningu</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="iDash Workshop Warsaw" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/idash.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Wprowadzenie do Deep Learningu
+### iDash Workshop Warsaw
+
+---
+
+
+
+
+
+background-image: url('www/img/logo_black.png')
+background-size: 50%
+class: center, bottom
+
+##&lt;a href = "https://idash.pl/" target = "blank"&gt;idash.pl&lt;/a&gt;
+
+---
+class: middle, center
+
+#W jaki sposób prowadzimy szkolenia?
+
+---
+## Tematy szkoleń
+
+- Machine Learning (_R, Python_)
+--
+
+- Deep Learning (_R, Python_)
+--
+
+- Przetwarzanie danych (_R, Python_)
+--
+
+- Wprowadzenie (_R, Python_)
+
+--
+
+i wiele innych. Bazowe programy dostępne na naszej &lt;a href = "https://idash.pl/" target = "blank"&gt;stronie&lt;/a&gt;.
+
+
+---
+class: inverse, center, middle
+# Trenerzy
+
+---
+class: inverse, center, middle
+# Zasady
+
+---
+## Dane
+
+Pracujemy na publicznie dostępnych danych (które wstępnie dla was przetworzyliśmy) pochodzących z __AirBnb__, zawierających __charakterystykę nieruchomości__ dostępnych pod wynajem w Londynie wraz z ich __cenami__.
+
+Dane na temat Londynu oraz innych miast do pobrania &lt;a href = "http://insideairbnb.com" target = "_blank"&gt;tutaj&lt;/a&gt;.
+
+---
+## Plan na dzisiaj
+
+- Czym jest __Deep Learning__ oraz czym są __sieci neuronowe__
+
+--
+
+- Z jakich __elementów__ składa się sieć neuronowa
+
+--
+
+- Czym jest __Keras__
+
+--
+
+- Jak __zaimplementować__ prostą sieć neuronową prognozującą cenę mieszkania na podstawie jego charakterystyki
+
+
+---
+## Technikalia
+
+&lt;center&gt;
+&lt;br&gt;
+Tą &lt;b&gt;prezentację&lt;/b&gt; znajdziecie pod następującym adresem:
+
+&lt;a href="#"&gt;&lt;h2&gt;LINK DO PREZENTACJI TBA&lt;/h2&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+--
+
+&lt;center&gt;
+&lt;br&gt;
+Punktem wyjściowym jest &lt;b&gt;notebook&lt;/b&gt; na platformie Google Colab.
+
+&lt;a href="#"&gt;&lt;h2&gt;LINK DO NOTEBOOK'A TBA&lt;/h2&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+---
+## Google Colab - tworzenie kopii
+
+&lt;center&gt;
+&lt;img src='www/img/colab.gif' width = "40%" style = "margin-top:30px"/&gt;
+&lt;/center&gt;
+
+---
+class: inverse, center, middle
+
+# Zaczynamy
+
+---
+## Czym jest sieć neuronowa
+
+Sieć neuronowa to po prostu złożona __funkcja__.
+
+--
+
+Przypomnijmy, że funkcja __zwraca pewne konkretne wartości, dla podanych argumentów__ (wartości wejściowych).
+
+---
+## Struktura sieci neuronowej
+
+.center[
+&lt;img src='www/img/struktura_sieci.png' width = "80%"/&gt;
+]
+
+---
+## Warstwa
+
+.pull-left[
+&lt;img src='www/img/Warstwa.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Warstwa sieci składa się z pojedynczych __neuronów__.
+
+Sieć może mieć __wiele warstw__.
+]
+
+---
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Neuron to __najmniejszy element sieci__.
+]
+
+---
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Neuron to __najmniejszy element sieci__.
+
+Jest to w najprostszym wariancie __funkcja liniowa__ wielu zmiennych.
+]
+
+---
+## Neuron
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Bierze ona wartości z poprzedniej warstwy, mnoży je przez pewne __wagi__ i dodaje do siebie.
+]
+
+---
+## Neuron
+
+.pull-left[
+&lt;img src='www/img/Neuron_input_annotated.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Bierze ona wartości z poprzedniej warstwy, mnoży je przez pewne __wagi__ i dodaje do siebie.
+
+Obliczenie dla jednego neuronu wygląda w następujący sposób:
+
+`\(y = w_1 * x_1 + w_2 * x_2 + b\)`
+]
+
+---
+
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Obliczona wartość jest wykorzystywana jako wartość wejściowa (input) przez neurony znajdujące się w __kolejnej warstwie__.
+]
+
+---
+
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Obliczona wartość jest wykorzystywana jako wartość wejściowa (input) przez neurony znajdujące się w __kolejnej warstwie__.
+
+Siec składa się zatem z wielu __połączonych ze sobą funkcji liniowych__. 
+]
+
+---
+## Do czego zmierzamy?
+
+--
+
+Sieć dąży do tego, aby ustalić takie wagi, aby wynik wykonania wszystkich połączonych ze sobą funkcji był najbardziej zbliżony do faktycznych wartości widocznych w danych.
+
+--
+
+__Trenowanie sieci__, to zatem nic innego jak proces dostosowywania wag.
+
+---
+class: inverse, center, middle
+
+# Deep Learning
+
+---
+## Czym jest Deep Learning?
+
+.pull-left[
+Deep learningiem nazywamy wykorzystanie __skomplikowanych sieci neuronowych__ z dużą ilością warstw.
+
+Metody deep learningowe to zatem __bardzo__ złożone funkcje.
+]
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+
+---
+class: inverse, center, middle
+
+# Dlaczego Deep Learning?
+
+---
+## Dlaczego Deep Learning?
+
+&lt;center&gt;
+&lt;img src='www/img/dl_vs_regular.png' width = "90%"/&gt;
+&lt;/center&gt;
+
+???
+
+Analogia do budowania rakiety.
+
+---
+## Zastosowanie Deep Learningu
+
+.pull-left.medium-text[
+Metody Deep Learning'owe można wykorzystać do rozwiązania __wielu rodzajów problemów__:
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Zastosowanie Deep Learningu
+
+.pull-left.medium-text[
+Metody Deep Learning'owe można wykorzystać do rozwiązania __wielu rodzajów problemów__:
+
+- rozpoznawania dzwięków oraz obrazów,
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Zastosowanie Deep Learningu
+
+.pull-left.medium-text[
+Metody Deep Learning'owe można wykorzystać do rozwiązania __wielu rodzajów problemów__:
+
+- rozpoznawania dzwięków oraz obrazów,
+- tworzenia systemów autonomicznie podejmujących decyzje,
+
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Zastosowanie Deep Learningu
+
+.pull-left.medium-text[
+Metody Deep Learning'owe można wykorzystać do rozwiązania __wielu rodzajów problemów__:
+
+- rozpoznawania dzwięków oraz obrazów,
+- tworzenia systemów autonomicznie podejmujących decyzje,
+- tworzenia rozwiązań modelujących "klasyczne" problemy.
+
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Zastosowanie Deep Learningu
+
+.pull-left.medium-text[
+Metody Deep Learning'owe można wykorzystać do rozwiązania __wielu rodzajów problemów__:
+
+- rozpoznawania dzwięków oraz obrazów,
+- tworzenia systemów autonomicznie podejmujących decyzje,
+- tworzenia rozwiązań modelujących "klasyczne" problemy.
+
+Rozwiązania Deep Learningowe, dzięki swojej naturze, sprawdzają się bardzo dobrze w przypadku __danych nieustrukturyzowanych__.
+
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+
+## Machine Learning vs. Deep Learning
+
+&lt;center&gt;
+&lt;img src='www/img/Deep_Learning.png' width = "50%" style = "margin-top:30px"/&gt;
+&lt;/center&gt;
+
+---
+class: inverse, center, middle
+
+# Jak budować sieci neuronowe?
+
+---
+class: inverse, center, middle
+
+# Keras na ratunek!
+
+---
+## Czym jest Keras
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+__Keras__ jest biblioteką do budowania sieci neuronowych.
+
+--
+
+Założeniem biblioteki jest umożliwienie budowy sieci __w prosty sposób__.
+
+---
+## Praca z sieciami w Keras'ie
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+Pracę z siecią neuronową w Kerasie można podzielić na kilka etapów:
+
+--
+
+1. Definicja struktury sieci
+
+--
+
+2. Definicja sposobu trenowania
+
+--
+
+3. Trening
+
+--
+
+4. Ewaluacja
+
+--
+
+5. Predykcja
+
+---
+class: middle, center
+&lt;img src='www/img/workflow_1.png' width = "100%"/&gt;
+
+---
+class: inverse, center, middle
+
+# Demo
+
+???
+
+https://colab.research.google.com/drive/1ltaGeE-uYSFpO1bXApd1FJIzJf5Qxfdk
+
+---
+## Inicjalizacja modelu
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+Pracę nad strukturą sieci należy zacząć od __inicjalizacji modelu naszej sieci__. Najprostszym sposobem na inicjalizację modelu jest wykorzystanie funkcji `Sequental()` z modułu `keras.models.` 
+
+
+```python
+import keras
+model = keras.models.Sequential()
+```
+
+---
+## Definicja struktury sieci
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+Kolejne warstwy sieci definiujemy z użyciem funkcji `add()` wywoływanej na obiekcie, utworzonym w poprzednim kroku. Przykładowo:
+
+
+```python
+model.add(keras.layers.Dense(units = 4, input_dim = 2))
+model.add(keras.layers.Dense(units = 1))
+```
+
+--
+
+Pierwszym i najważniejszym argumentem jest wiekość warstwy defniowana za pomocą argumentu `unit`.
+
+--
+
+Ważne jest również, aby zdefiniować ilość zmiennych wejściowych w pierwszym wywołaniu funkcji `add()` używając argumentu `input_dim`.
+
+---
+class: inverse, center, middle
+
+# Czym jest "Dense"?
+
+---
+## Definicja struktury sieci
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/Input_dense_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+import keras
+model = keras.models.Sequential()
+
+*model.add(
+* keras.layers.Dense(
+*   units = 4,
+*   input_dim = 2
+* )
+*)
+model.add(
+  keras.layers.Dense(units = 4)
+)
+model.add(
+  keras.layers.Dense(units = 1)
+)
+```
+]]
+---
+## Definicja struktury sieci
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/dense_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+import keras
+model = keras.models.Sequential()
+
+model.add(
+  keras.layers.Dense(
+    units = 4,
+    input_dim = 2
+  )
+)
+*model.add(
+* keras.layers.Dense(units = 4)
+*)
+model.add(
+  keras.layers.Dense(units = 1)
+)
+```
+]]
+---
+
+## Definicja struktury sieci
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/output_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+import keras
+model = keras.models.Sequential()
+
+model.add(
+  keras.layers.Dense(
+    units = 4,
+    input_dim = 2
+  )
+)
+model.add(
+  keras.layers.Dense(units = 4)
+)
+*model.add(
+* keras.layers.Dense(units = 1)
+*)
+```
+]]
+---
+
+## Definicja struktury sieci
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+Strukturę obecnej sieci możemy podejrzeć wykonując metodę `summary()` na obiekcie modelu.
+
+--
+
+.super-small-code[
+
+```r
+model.summary()
+```
+]
+
+--
+
+.super-small-code[
+
+```r
+_________________________________________________________________
+Layer (type)                 Output Shape              Param   
+=================================================================
+first_layer (Dense)          (None, 4)                 12        
+_________________________________________________________________
+second_layer (Dense)         (None, 4)                 20        
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 5         
+=================================================================
+Total params: 37
+Trainable params: 37
+Non-trainable params: 0
+```
+]
+
+---
+class: inverse
+
+### Zadanie 1 (10 minut)
+
+1.&amp;nbsp;Wykonaj kod znajdujący się w pierwszej części dostarczonego notebook'a. Załaduje on dane na temat nieruchomości w Londynie. Zapoznaj się z danymi.
+
+--
+
+2.&amp;nbsp;Stwórz strukturę sieci, która:
+
+--
+
+- posiada 2 zmienne wejściowe,
+--
+
+- posiada jedną warstwę wielkości 256,
+--
+
+- zwraca jedną wartość.
+
+--
+
+Wyświetl strukturę sieci. Ile parametrów ma taka sieć?
+
+---
+class: middle, center
+&lt;img src='www/img/workflow_2.png' width = "100%"/&gt;
+
+---
+class: inverse, middle, center
+
+# W jaki sposób uczy się sieć?
+
+---
+## Uczenie się sieci
+
+Aby sieć mogła "się uczyć" konieczne jest zdefiniowanie dwóch elementów: funkcji straty (__loss function__) oraz algorytmu optymalizacyjnego (__optimizer__).
+
+--
+
+Funkcja straty wylicza różnicę pomiędzy wartościami wyjściowymi (_output_) a wartościami rzeczywistymi (_target_).
+
+--
+
+Optimizer, biorąc pod uwagę funkcję straty, pozwala na aktualizację wag parametrów modelu tak aby __minimalizować błąd pomiaru__. Najczęściej używany jest `Adam`.
+
+---
+class: inverse, middle, center
+
+# Mean Square Error
+
+---
+## Uczenie się sieci
+
+Uczenie sieci jest __procesem iteracyjnym__:
+--
+
+1. Dane wejściowe pozwalają wyliczyć funkcję straty.
+
+--
+
+2. Optimizer aktualizuje wagi parametrów modelu.
+
+--
+
+3. Zaktualizowane wagi + __te same__ dane wejściowe generują nową wartość funkcji straty.
+
+--
+
+4. Kroki 2-3 są powtarzane.
+
+---
+class: inverse, middle, center
+
+# Jak to zrobić w Kerasie?
+
+---
+## Definicja sposobu trenowania
+
+
+```python
+model.compile(
+  loss='mean_squared_error', # Funkcja straty
+  optimizer='adam',
+  metrics=['mae'] # Opcjonalnie
+)
+```
+
+--
+
+Argument __metrics__ pozwala zdefiniować miarę/y za pomocą której będziemy oceniać jakość modelu. Np. `accuracy`, `mae`.
+
+--
+
+Wszystkie miary dostępne &lt;a href = "https://keras.io/metrics/" target = "blank"&gt;tutaj&lt;/a&gt;.
+
+---
+class: middle, center
+&lt;img src='www/img/workflow_3.png' width = "100%"/&gt;
+
+---
+## Trenowanie modelu
+
+
+
+```python
+model.fit(x=mtcars_x, 
+          y=mtcars_y, 
+          epochs=1000)
+```
+
+--
+
+Argument `epochs`, definiuje ilość iteracji przez cały dostępny zbiór danych treningowych.
+
+
+???
+
+Faktyczny trening (dopasowanie modelu do danych) następuje poprzez wywołanie funkcji `fit()` na obiekcie modelu. Przykładowo:
+
+---
+class: inverse
+
+### Zadanie 2 (15 minut)
+
+1.&amp;nbsp;Zdefiniuj sposób trenowania sieci.
+
+2.&amp;nbsp;Wywołaj funkcję `split_data()`, która podzieli zbiór danych na treningowy i testowy. Zmiennymi wejściowymi powinny być zmienne `latitude` oraz `longitude`. Zmienną wynikową zmienna `price`.
+
+3.&amp;nbsp; Wytrenuj model na 5 epokach korzystając ze zbioru treningowego.
+
+---
+## Podział danych w Deep Learningu
+
+__Machine Learning__ - 80-10-10:
+--
+
+- 80% zbiór __treningowy__, 
+- pozostałe zbiory 10% to zbiór __walidacyjny__ oraz __testowy__.
+
+--
+
+W przypadku __Deep Learningu__, zbiór danych &gt; 1M można podzielić w stosunku 98-1-1.
+
+---
+## Mini-batching
+
+W przypadku dużych zbiorów danych, uczenie sieci neuronowej na wszystkich danych jednocześnie jest __często niemożliwe__ z powodu wymaganych obliczeń przekraczających możliwości pamięci RAM.
+
+--
+
+Metoda mini-batching rozwiązuje ten problem.
+
+--
+
+Umożliwia ona podział całego zbioru na małe podzbiory, na których model uczyć się będzie iteracyjnie, nie przeciążając tym samym zasobów komputera.
+
+---
+## Mini-batching
+
+
+```python
+model.fit(
+     x=mtcars_x,
+     y=mtcars_y,
+     epochs=1000,
+     batch_size=2
+)
+```
+
+--
+
+Argument `batch_size` wskazuje na wielkość podzbioru. 
+
+--
+
+W przypadku zbioru z 100 elementami, `batch_size=2` utworzy 50 podzbiorów.
+
+--
+
+Argument `epochs=1000` wskazuje, że w procesie uczenia zostanie wykorzystane 50 000 podzbiorów (`1000 * 50`).
+---
+## validation_split()
+
+
+```python
+model.fit(
+    x=mtcars_x,
+    y=mtcars_y,
+    epochs=1000,
+    validation_split=0.2
+)
+```
+
+
+---
+class: inverse
+
+### Zadanie 3 (5 min)
+
+1.&amp;nbsp;Dodaj podział zbioru, na którym trenujesz model na treningowy (90% danych) i walidacyjny (10% danych). 
+
+2.&amp;nbsp;Wytrenuj model na 5 epokach używając batch'y wielkości 32.
+
+---
+class: inverse, middle, center
+
+# Liniowość sieci
+
+---
+## Liniowość sieci
+.pull-left[
+- Domyślnie, sieć neuronowa jest zbiorem wielu funkcji liniowych.
+
+]
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+## Liniowość sieci
+.pull-left[
+- Domyślnie, sieć neuronowa jest zbiorem wielu funkcji liniowych.
+
+- Wykorzystanie zbioru funkcji liniowych __nie różni się__ znacząco od pojedyńczej funkcji liniowej...
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+## Liniowość sieci
+.pull-left[
+- Domyślnie, sieć neuronowa jest zbiorem wielu funkcji liniowych.
+
+- Wykorzystanie zbioru funkcji liniowych nie różni się znacząco od pojedyńczej funkcji liniowej - w obu przypadkach poszukiwane będą __liniowe zależności__ pomiędzy danymi!
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+
+---
+## Liniowość sieci
+.pull-left[
+- Domyślnie, sieć neuronowa jest zbiorem wielu funkcji liniowych.
+
+- Wykorzystanie zbioru funkcji liniowych nie różni się znacząco od pojedyńczej funkcji liniowej - w obu przypadkach poszukiwane będą __liniowe zależności__ pomiędzy danymi!
+
+- Nasze dane są zwykle bardziej skomplikowane a ich powiązanie zwykle __nieliniowe__.
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+class: inverse, middle, center
+# Jak stworzyć element nieliniowości w sieci neuronowej?
+
+---
+class: inverse, middle, center
+
+# Za pomocą funkcji aktywacji!
+
+---
+## Funkcja aktywacji
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Funkcja aktywacji umożliwia tworzenie __nieliniowej transformacji__ w obrębie sieci neuronowej.
+]
+
+---
+## Funkcja aktywacji
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Funkcja aktywacji umożliwia tworzenie __nieliniowej transformacji__ w obrębie sieci neuronowej.
+
+Funkcja liniowa staje się __argumentem__ funkcji aktywacji `\(a\)`.
+
+`\(y = a(w_1 * x_1 + w_2 * x_2 + b)\)`
+]
+
+---
+## Funkcja aktywacji
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Obliczona wartość funkcji aktywacji jest wykorzystywana przez neurony znajdujące się w kolejnej warstwie.
+]
+---
+class: inverse, middle, center
+# Rodzaje funkcji aktywacji
+
+---
+## Sigmoid 
+.absolute-pull-seven[&lt;img src='www/img/sigmoid.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Wartości funkcji _sigmoid_ zawierają się w przedziale [0,1].
+]
+
+---
+## Tanh
+.absolute-pull-seven[&lt;img src='www/img/tanh.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Wartości funkcji _tanh_ (tangens hiperboliczny) zawierają się w przedziale [-1,1].
+]
+---
+## ReLU
+.absolute-pull-seven[&lt;img src='www/img/relu.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Funkcja _ReLU_ jest obecnie __standardową__ funkcją aktywacji wykorzystywaną w wartwach sieci.
+
+]
+
+---
+## ReLU
+.absolute-pull-seven[&lt;img src='www/img/relu.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Funkcja _ReLU_ jest obecnie __standardową__ funkcją aktywacji wykorzystywaną w wartwach sieci.
+
+Jest odporna na większość problemów wynikających z wykorzystania funkcji _sigmoid_ lub _tanh_.
+
+]
+---
+## ReLU
+.absolute-pull-seven[&lt;img src='www/img/relu.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Funkcja _ReLU_ jest obecnie __standardową__ funkcją aktywacji wykorzystywaną w wartwach sieci.
+
+Jest odporna na większość problemów wynikających z wykorzystania funkcji _sigmoid_ lub _tanh_.
+
+W szczególnych przypadkach można stosować zmodyfikowaną funkcję __Leaky ReLU__.
+]
+
+---
+class: inverse, middle, center
+
+# Jaką funkcję aktywacji wybrać?
+
+---
+## Funkcja aktywacji a wartwa sieci
+
+.pull-left[
+&lt;img src='www/img/activation_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Pomiędzy zmiennymi wejściowymi (_inputs_) a pierwszą wartwą sieci stosuje się funkcję aktywacji, która działa na __każdym neuronie z osobna__.
+]
+---
+## Funkcja aktywacji a wartwa sieci
+
+.pull-left[
+&lt;img src='www/img/activation_hidden.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Pomiędzy zmiennymi wejściowymi (_inputs_) a pierwszą wartwą sieci stosuje się funkcję aktywacji, która działa na __każdym neuronie z osobna__.
+
+Podobnie, pomiędzy kolejnymi wartwami sieci zwykle stosujemy funkcję __ReLU__.
+
+]
+
+---
+## Funkcja aktywacji a wartwa sieci
+
+.pull-left[
+&lt;img src='www/img/activation_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Pomiędzy zmiennymi wejściowymi (_inputs_) a pierwszą wartwą sieci stosuje się funkcję aktywacji, która działa na __każdym neuronie z osobna__.
+
+Podobnie, pomiędzy kolejnymi wartwami sieci zwykle stosujemy funkcję __ReLU__.
+
+Funkcja aktywacji zastosowana na zmiennej wyjściowej (_output_) __zależy od problemu__, który chcemy rozwiązać.
+
+]
+
+---
+## Zmienna wyjściowa a funkcja aktywacji
+
+__Klasyfikacja binarna__:
+
+- `sigmoid` - wartości w przedziale [0,1]
+
+--
+
+__Klasyfikacja wieloklasowa__:
+
+- `softmax` - suma wartości równa 1
+
+--
+
+&amp;nbsp;__Regresja__:
+
+- `regresja liniowa` - wartość ciągła
+
+---
+class: inverse, middle, center
+
+# Quiz
+### Jaką funkcję aktywacji zastosować na wyjściu sieci?
+---
+class: inverse, middle, center
+
+# Wykrywanie spamowych maili
+
+???
+### Jaką funkcję aktywacji zastosować na wyjściu sieci?
+
+---
+class: inverse, middle, center
+
+# Przewidywanie temperatury powietrza
+
+???
+### Jaką funkcję aktywacji zastosować na wyjściu sieci?
+
+---
+class: inverse, middle, center
+
+# Klasyfikacja psów, kotów i ptaków na obrazkach
+
+
+???
+### Jaką funkcję aktywacji zastosować na wyjściu sieci?
+
+---
+class: inverse, middle, center
+# Funkcja aktywacji w Kerasie
+
+---
+## Funkcja aktywacji 
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+_Wykorzystanie wartwy Activation_
+
+.super-small-code[
+
+```python
+from keras.layers import Dense, Activation
+model.add(Dense(1000, input_dim = 3))
+model.add(Activation('relu'))
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+```
+]
+
+--
+
+_Wykorzystanie argument activation wartwie Dense_
+
+.super-small-code[
+
+```python
+model.add(Dense(1000, input_dim = 3, activation='relu'))
+model.add(Dense(1, activation='sigmoid'))
+```
+]
+
+---
+class: inverse
+### Zadanie 4 (10 min)
+
+1.&amp;nbsp;Dodaj do istniejącej architektury dwie kolejne warstwy gęste o rozmianach kolejno 128 oraz 32 do modelu.
+
+--
+
+2.&amp;nbsp;Dodaj odpowiednie funkcje aktywacji.
+
+--
+
+3.&amp;nbsp;Wytrenuj model na nowo. Czy widzisz różnice w wynikach?
+
+---
+class: inverse, middle, center
+# Przygotowanie danych
+
+---
+## Przygotowanie danych
+
+W przeciwieństwie do algorytmów Machine Learnigowych, sieci głębokie same pozwalają wykryć zależności pomiędzy danymi.
+
+--
+
+Nie wymagają __feature enginerringu__! 
+
+--
+
+Zwykle jednak, dane muszą został odpowiednio przygotowane na potrzeby sieci neuronowej.
+
+---
+class: inverse, middle, center
+## 1. Dane powinny być znormalizowane
+
+---
+## Normalizacja danych
+
+
+&lt;center&gt;&lt;img src='www/img/standaryzacja.png' width = "120%"/&gt;&lt;/center&gt;
+
+---
+## Normalizacja danych
+
+.pull-left[
+Normalizacja zmiennych jest __niezbędnym krokiem__ w konteście uczenia sieci neuronowej.
+
+]
+
+--
+
+.pull-right.center.text-middle[
+`\(z = {x - mean(x) \over std(x)}\)`
+]
+
+
+---
+## Normalizacja danych
+
+.pull-left[
+Normalizacja zmiennych jest __niezbędnym krokiem__ w konteście uczenia sieci neuronowej.
+
+Nieznormalizane dane mogą w skutkować __powolnym i niestabilnym__ procesem treningu.
+
+]
+
+.pull-right.center.text-middle[
+`\(z = {x - mean(x) \over std(x)}\)`
+]
+
+---
+## Normalizacja danych
+
+.pull-left[
+Normalizacja zmiennych jest __niezbędnym krokiem__ w konteście uczenia sieci neuronowej.
+
+Nieznormalizane dane mogą w skutkować __powolnym i niestabilnym__ procesem treningu.
+
+W przypadku problemu regresji, podobnie jak w ML, __skalowanie__ dane jest __konieczne__...
+]
+
+.pull-right.center.text-middle[
+`\(z = {x - mean(x) \over std(x)}\)`
+]
+
+
+---
+## Normalizacja danych
+
+.pull-left[
+Normalizacja zmiennych jest __niezbędnym krokiem__ w konteście uczenia sieci neuronowej.
+
+Nieznormalizane dane mogą w skutkować __powolnym i niestabilnym__ procesem treningu.
+
+W przypadku problemu regresji, podobnie jak w ML, skalowanie dane jest konieczne. W przeciwnym raze, dane mogą spowodować że proces uczenia się sieci nie powiedzie się.
+]
+
+.pull-right.center.text-middle[
+`\(z = {x - mean(x) \over std(x)}\)`
+]
+
+---
+## Jak to zakodować?
+
+--
+
+.small-code[
+
+```python
+from sklearn.preprocessing import StandardScaler
+std_scale = StandardScaler().fit(train_mtcars_x)
+x_train_norm = std_scale.transform(train_mtcars_x)
+x_test_norm = std_scale.transform(test_mtcars_x)
+```
+]
+
+---
+class: inverse, middle, center
+## 2. Braki danych są nieakceptowane przez sieć
+
+---
+## Braki danych
+
+---
+class: inverse
+
+### Zadanie 5 (15 min)
+
+1.&amp;nbsp;Zmodyfikuj model uwzględniając pozostałe zmienne ciągłe ('latitude', 'longitude', 'number_of_reviews', 'accommodates', 'beds', 'review_scores_rating').
+
+--
+
+2.&amp;nbsp;Dokonaj przekształceń w danych tak aby trenowanie było przede wszystkim możliwe ale też optymalne.
+
+--
+
+3.&amp;nbsp;Wytrenuj model na nowo. Czy widzisz różnice w wynikach?
+
+---
+
+Slajdy validate i predict
+
+---
+class: inverse
+### Zadanie 6 (5 min)
+
+Zweryfikuj model na dancyh testowych
+
+---
+## Wizualizacja procesu trenowania 
+
+TBD
+
+---
+## Overfitting
+
+
+---
+class: inverse
+
+### Zadanie 5 (10 min)
+
+Dodaj wizualizację procesu trenowania do modelu.
+
+Czy po treningu naszego modelu przez 10 epok występuje overfitting?
+
+---
+## Dropout
+
+---
+class: inverse
+
+### Zadanie 7 (10 min)
+
+Dodaj dropout
+
+---
+## Jak zbudować optymalną sieć?
+
+- zbudowanie optymalnej struktury sieci właśniwym funkcjami aktywacji
+
+- znalezienie optymalnych hyperparametrów:
+ - liczba `epoch`
+ - wielkość `batch_size`
+ - funkcję aktywacji
+ - algorytm optymalizacyjny
+ - funkcja straty
+ 
+---
+class: inverse, middle, center
+
+#Hiperparametry
+
+---
+class: inverse, middle, center
+
+# Podsumowanie
+
+---
+## Podsumowanie
+
+---
+## Kiedy wykorzystywać DL 
+
+Jak dużo danych -&gt; podkreślić że to był toy problem.
+
+Zrozumienie podstaw niezbędne do zrozumienia DL w bardziej skomplikowanych systemach.
+
+---
+## Kolejny meetup
+
+Data
+Temat
+
+Stay tuned!
+
+---
+class: inverse, bottom, center
+background-image: url('www/img/logo_white.png')
+background-size: 50%
+
+mb@idash.pl mo@idash.pl
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

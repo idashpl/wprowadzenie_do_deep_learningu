@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&subset=latin-ext');
+
+body {
+    font-family: 'Open Sans';
+}
+
+h1, h2, h3 {
+    font-family: 'Open Sans';
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.noclear {
+  clear:none;
+}
+
+.inverse {
+    background-color: #000;
+}
+
+.inverse code.remark-code {
+    text-shadow: 0 0 0 transparent;
+}
+
+.title-slide {
+  background-image: url('../www/img/logo_white.png');
+  background-size: 25%;
+  background-position: 49% 20%; 
+}
+
+div.title-slide h1,
+div.title-slide h2,
+div.title-slide h3 {
+  line-height: 1.25em !important;
+  position: el;
+}
+
+div.title-slide h3 {
+  font-weight: 300;
+}
+
+.remark-slide-content {
+  font-size:26px;
+}
+
+.medium-text {
+  font-size:24px;
+}
+
+.text22 {
+  font-size:22px;
+}
+
+.text20 {
+  font-size:20px;
+}
+
+.text18 {
+  font-size:18px;
+}
+
+.remark-code {
+  font-size:26px !important;
+}
+
+.small-code pre .remark-code {
+  font-size:22px !important;
+}
+
+.super-small-code pre .remark-code {
+  font-size:19px !important;
+}
+
+.ultra-small-code pre .remark-code {
+  font-size:16px !important;
+}
+
+.super-ultra-small-code pre .remark-code {
+  font-size:12px !important;
+}
+
+.wrap-code pre {
+  white-space: normal !important;
+}
+
+a {
+  color: #0cb4ce;
+}
+
+.redbg {
+  background-color:#0ba2ba;
+  color:#fff;
+}
+
+.redbg a {
+  color: #464449;
+}
+
+.pull-seven {
+  float: left;
+  width: 70%;
+}
+
+.pull-three {
+  float: right;
+  width: 24%;
+}
+
+.absolute-pull-seven {
+  float: left;
+  width: 75%;
+  position: absolute;
+  left: 10px;
+  top: 130px;
+}
+
+.absolute-pull-three {
+  position: absolute;
+  float: right;
+  width: 35%;
+  left: 60%;
+}
+
+.second-division {
+  clear: none;
+}
+
+table {
+  font-size: 20px;
+}
+
+.keras-header {
+    background-color: transparent;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 170px;
+    width: 100%;
+    background-image: url('../www/img/keras_logo.png');
+    background-size: 8%;
+    background-position: 96%;
+    background-repeat: no-repeat;
+}
+
+.text-middle {
+    position: relative;
+    top: 100px;
+    font-size: 60px;
+}
