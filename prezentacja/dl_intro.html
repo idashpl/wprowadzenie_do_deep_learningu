@@ -1263,7 +1263,6 @@ If the quantity values are small (near 0-1) and the distribution is limited (e.g
 ---
 ## Jak zakodować standaryzację?
 
-&lt;div class="keras-header"&gt;&lt;/div&gt;
 --
 
 .small-code[
@@ -1278,8 +1277,6 @@ std_scale = StandardScaler().fit(train_mtcars_x)
 
 ---
 ## Jak zakodować standaryzację?
-
-&lt;div class="keras-header"&gt;&lt;/div&gt;
 
 .small-code[
 
@@ -1296,8 +1293,6 @@ x_train_std = std_scale.transform(train_mtcars_x)
 
 ---
 ## Jak zakodować standaryzację?
-
-&lt;div class="keras-header"&gt;&lt;/div&gt;
 
 .small-code[
 
@@ -1318,7 +1313,6 @@ x_test_std = std_scale.transform(test_mtcars_x)
 ---
 ## Jak zakodować __normalizację__?
 
-&lt;div class="keras-header"&gt;&lt;/div&gt;
 
 .small-code[
 
@@ -1366,6 +1360,8 @@ class: inverse
 
 2.&amp;nbsp;Wytrenuj model na nowo na 100 epokach. Czy widzisz różnice w wynikach?
 
+---
+class: inverse
 ### Zadanie 5.2 (5 min)
 
 1.&amp;nbsp;Zmodyfikuj model uwzględniając pozostałe zmienne ciągłe ('latitude', 'longitude', 'number_of_reviews', 'accommodates', 'beds', 'review_scores_rating').
