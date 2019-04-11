@@ -144,6 +144,6 @@ table {
 
 .text-middle {
     position: relative;
-    top: 100px;
-    font-size: 60px;
+    top: 0px;
+    font-size: 40px;
 }
