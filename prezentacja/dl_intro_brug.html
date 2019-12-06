@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Introduction to Deep Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Berlin R User Group 2019" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/idash.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to Deep Learning
+### Berlin R User Group 2019
+
+---
+
+
+
+
+
+background-image: url('www/img/logo_black.png')
+background-size: 50%
+class: center, bottom
+
+##&lt;a href = "https://idash.pl/" target = "blank"&gt;idash.pl&lt;/a&gt;
+
+---
+class: middle, center
+
+# The philosophy of iDash
+
+---
+## Training topics
+
+- __M__achine __L__earning (_R, Python_),
+--
+
+- __D__eep __L__earning (_R, Python_),
+--
+
+- data processing (_R, Python_),
+--
+
+- introductions (_R, Python_),
+
+--
+
+and many more. Core programmes are available on &lt;a href = "https://idash.pl/" target = "blank"&gt;our website&lt;/a&gt;.
+
+
+---
+class: inverse, center, middle
+# Trainers
+
+---
+class: inverse, center, middle
+# Rules
+
+---
+## Data
+
+We're working on a publicly available dataset containing the features of the Airbnb properties in London along with their prices per night. We've slightly preprocessed the data for the purpose of this training.
+
+The original data can be found &lt;a href = "http://insideairbnb.com" target = "_blank"&gt;here&lt;/a&gt;.
+
+---
+## Plan for today
+
+--
+
+- What are __Deep Learning__ and __Neural Networks__
+
+--
+
+- The __components__ of a neural network
+
+--
+
+- What is __Keras__
+
+--
+
+- How to __implement__ a simple neural network __predicting the price of a property based on it's features__.
+
+---
+## Technicalities
+
+&lt;center&gt;
+&lt;br&gt;
+This &lt;b&gt;slidedeck&lt;/b&gt; is available at:
+
+&lt;a href="https://bit.ly/2niZYZD"&gt;&lt;h2&gt;bit.ly/2niZYZD&lt;/h2&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+--
+
+&lt;center&gt;
+&lt;br&gt;
+The starting point is this Google Colab &lt;b&gt;notebook&lt;/b&gt;:
+
+&lt;a href="https://bit.ly/2lN7gEe"&gt;&lt;h2&gt;bit.ly/2lN7gEe&lt;/h2&gt;&lt;/a&gt;
+&lt;/center&gt;
+
+---
+## Google Colab - copying the notebook
+
+&lt;center&gt;
+&lt;img src='www/img/colab.gif' width = "40%" style = "margin-top:30px"/&gt;
+&lt;/center&gt;
+
+---
+class: inverse, center, middle
+
+# Let's get to work!
+
+---
+## What is a neural network
+
+Neural network is just a complex __function__.
+
+--
+
+Function, is a construct that returns __specific output__ given __specific input__ (arguments).
+
+---
+## The structure of a neural network
+
+.center[
+&lt;img src='www/img/network_structure.png' width = "80%"/&gt;
+]
+
+---
+## Layer
+
+.pull-left[
+&lt;img src='www/img/Warstwa.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Layer is made of single __neurons__.
+
+Neural network can have __many layers__.
+]
+
+---
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Neuron is __the smallest element__ of the neural network.
+]
+
+---
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Neuron is __the smallest element__ of the neural network.
+
+In the simplest possible scenario, it's a multi variable __linear function__.
+]
+
+---
+## Neuron
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+This function takes the weights from the previous layer, multiplies it by a given __weights__ and adds the results together.
+]
+
+---
+## Neuron
+
+.pull-left[
+&lt;img src='www/img/Neuron_input_annotated.png' width = "80%"/&gt;
+]
+
+.pull-right[
+This function takes the weights from the previous layer, multiplies it by a given __weights__ and adds the results together.
+
+Calculation for a single neuron looks like this:
+
+`\(y = w_1 * x_1 + w_2 * x_2 + b\)`
+]
+
+---
+## Neuron
+
+.pull-left[
+&lt;img src='www/img/Neuron_input_annotated.png' width = "80%"/&gt;
+]
+
+.pull-right[
+This function takes the weights from the previous layer, multiplies it by a given __weights__ and adds the results together.
+
+Calculation for a single neuron looks like this:
+
+`\(y = w_1 * x_1 + w_2 * x_2 + b\)`
+
+__Question:__ What's the number of parameters of the selected (blue) neuron? 
+]
+
+---
+
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+The calculated value is then used as the input for the neurons in the __next layer__.
+]
+
+---
+
+## Neuron 
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+The calculated value is then used as the input for the neurons in the __next layer__.
+
+Therefore, the neural network (in the simplest scenario) is made of __multiple connected linear functions__.
+]
+
+---
+## How does it all work?
+
+--
+
+The __goal of the network__ is to __find weights__ for all the parameters so that the result of executing all those connected functions is as close to original data as possible.
+
+--
+
+__Training the network__, is therefore the process of adjusting those weights.
+
+---
+class: inverse, center, middle
+
+# Deep Learning
+
+---
+## What is Deep Learning?
+
+.pull-left[
+We call using __complex neural networks__ with __many layers__ "Deep Learning".
+
+Deep learning methods are therefore still __complex functions__!
+]
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+
+---
+class: inverse, center, middle
+
+# Why Deep Learning
+
+---
+## Why Deep Learning
+
+&lt;center&gt;
+&lt;img src='www/img/dl_vs_regular_eng.png' width = "90%"/&gt;
+&lt;/center&gt;
+
+???
+
+Analogia do budowania rakiety.
+
+---
+## Applications of Deep Learning
+
+.pull-left.medium-text[
+Deep Learning methods can be used to solve __many types of problems__:
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Applications of Deep Learning
+
+.pull-left.medium-text[
+Deep Learning methods can be used to solve __many types of problems__:
+
+- classification of images and sound,
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Applications of Deep Learning
+
+.pull-left.medium-text[
+Deep Learning methods can be used to solve __many types of problems__:
+
+- classification of images and sound,
+- building complex autonomous systems,
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Applications of Deep Learning
+
+.pull-left.medium-text[
+Deep Learning methods can be used to solve __many types of problems__:
+
+- classification of images and sound,
+- building complex autonomous systems,
+- everyday problems (like classification and regression on tabular data).
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+## Applications of Deep Learning
+
+.pull-left.medium-text[
+Deep Learning methods can be used to solve __many types of problems__:
+
+- classification of images and sound,
+- building complex autonomous systems,
+- everyday problems (like classification and regression on tabular data).
+
+However, Deep Learning solutions work best on unstructured data.
+]
+
+.pull-right[
+&lt;img src='www/img/mnist_sample.png' width = "70%"/&gt;
+]
+
+---
+
+## Machine Learning vs. Deep Learning
+
+&lt;center&gt;
+&lt;img src='www/img/Deep_Learning_eng.png' width = "50%" style = "margin-top:30px"/&gt;
+&lt;/center&gt;
+
+---
+class: inverse, center, middle
+
+# How to build neural networks?
+
+---
+class: inverse, center, middle
+
+# With Keras!
+
+---
+## What is Keras?
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+__Keras__ is a high level library allowing to build neural networks.
+
+--
+
+The ultimate goal of Keras is to provide an __easy to use set of commands__ allowing to build networks quickly.
+
+---
+## Working with Keras
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+The typical process of creating and using Neural Networks can be divided into the following stages:
+
+--
+
+1. Defining the structure of the network
+
+--
+
+2. Defining the way of training
+
+--
+
+3. Training
+
+--
+
+4. Evaluation
+
+--
+
+5. Prediction
+
+---
+class: middle, center
+&lt;img src='www/img/nn_workflow_1_eng.png' width = "100%"/&gt;
+
+---
+class: inverse, center, middle
+
+# &lt;a href = "https://colab.research.google.com/drive/134oKxBHCXJdUbo6hnh1Jzd9YA95FxaoC" target = "blank"&gt;Demo&lt;/a&gt;
+
+???
+
+https://colab.research.google.com/drive/1ltaGeE-uYSFpO1bXApd1FJIzJf5Qxfdk
+
+---
+## Initializing the model
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+First thing we need to do to define the network structure is to __initialize the model__. This can be achieved using the `keras_model_sequential()` function.
+
+
+```r
+library(keras)
+model &lt;- keras_model_sequential()
+```
+
+---
+## Defining the network structure
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+Layers can be added by executing the `layer_dense()` function __on the model object__ created in the previous step.
+
+
+```r
+model %&gt;% 
+  layer_dense(units = 4, input_shape = 2) %&gt;% 
+  layer_dense(units = 1)
+```
+
+--
+
+The most important argument is the `unit` argument which defines the size of a layer.
+
+--
+
+It's also very important to define __number of input variables__ in the first call to the `layer_dense()` function. This can be done using the `input_dim` argument.
+
+---
+class: inverse, center, middle
+
+# Ok, but what is "dense"?
+
+---
+## Defining the network structure
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/Input_dense_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+library(keras)
+model &lt;- keras_model_sequential()
+
+*model %&gt;%
+* layer_dense(
+*   units = 4,
+*   input_dim = 2
+* ) %&gt;% 
+  layer_dense(units = 4)
+  layer_dense(units = 1)
+```
+]]
+---
+## Defining the network structure
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/dense_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+library(keras)
+model &lt;- keras_model_sequential()
+
+model %&gt;%
+  layer_dense(
+    units = 4,
+    input_dim = 2
+  ) %&gt;% 
+* layer_dense(units = 4)
+  layer_dense(units = 1)
+```
+]]
+---
+
+## Defining the network structure
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.pull-left[
+&lt;img src='www/img/output_keras.png' width = "80%"/&gt;
+]
+
+.pull-right[
+
+.small-code[
+
+```r
+library(keras)
+model &lt;- keras_model_sequential()
+
+model %&gt;%
+  layer_dense(
+    units = 4,
+    input_dim = 2
+  ) %&gt;% 
+  layer_dense(units = 4)
+* layer_dense(units = 1)
+```
+]]
+---
+
+## Defining the network structure
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+The __current structure__ of the network can be looked up by calling the `summary()` function on the model object. 
+
+--
+
+.super-small-code[
+
+```r
+model.summary()
+```
+]
+
+--
+
+.super-small-code[
+
+```r
+_________________________________________________________________
+Layer (type)                 Output Shape              Param   
+=================================================================
+first_layer (Dense)          (None, 4)                 12        
+_________________________________________________________________
+second_layer (Dense)         (None, 4)                 20        
+_________________________________________________________________
+output_layer (Dense)         (None, 1)                 5         
+=================================================================
+Total params: 37
+Trainable params: 37
+Non-trainable params: 0
+```
+]
+
+---
+class: inverse
+
+### Exercise 1 (10 min)
+
+1.&amp;nbsp;Execute the code located in the template notebook. It will load the data for the properties in London. __Get acquainted with the data__.
+
+--
+
+2.&amp;nbsp;Create the network structure that:
+
+--
+
+- takes 2 input variables,
+--
+
+- has one hidden layer of size 256,
+--
+
+- returns a single value.
+
+--
+
+Print the network structure. How many parameters are in the entire network?
+
+---
+class: middle, center
+&lt;img src='www/img/nn_workflow_2_eng.png' width = "100%"/&gt;
+
+---
+class: inverse, middle, center
+
+# The way the network is trained
+
+---
+## Training the network
+
+To be able to train the network we need to define 2 elements: the __loss function__ and the __optimizer__ algorithm.
+
+--
+
+The loss function calculates the __difference__ between the __output__ of the network and the __real values__ present in the data.
+
+--
+
+The optimizer, given the loss function is able to __update__ the parameters so that the __value of the loss function will be minimized__.
+
+--
+
+One of the most popular optimization algorithms is `Adam`.
+
+--
+
+More details about this and other optimizers can be found &lt;a href = "https://keras.io/optimizers/" target = "_blank"&gt;here&lt;/a&gt;.
+
+---
+class: inverse, middle, center
+
+# Mean Squared Error
+
+---
+## Training the network
+
+Training the network is an __iterative process__:
+--
+
+1. The __data__ and __randomly initialized weights__ allow to calculate the value of the output and therefore the value of the loss function.
+
+--
+
+2. The optimizer updates the weights.
+
+--
+
+3. The updated weights and __the same data__ allow to calculate the value of the loss function again.
+
+--
+
+4. Steps 2-3 are repeated.
+
+---
+class: inverse, middle, center
+
+# How to do this in Keras?
+
+---
+## Defining the way the network is trained
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+
+```r
+model %&gt;%
+  compile(
+    loss = 'mean_squared_error',
+    optimizer = 'adam',
+    metrics = 'mae'
+  )
+```
+
+--
+
+The __metrics__ argument allows to define other measures that could help us to diagnose the model. Those could be for example: `accuracy`, `mae`.
+
+--
+
+All metrics are available &lt;a href = "https://keras.io/metrics/" target = "blank"&gt;here&lt;/a&gt;.
+
+---
+class: middle, center
+&lt;img src='www/img/nn_workflow_3_eng.png' width = "100%"/&gt;
+
+---
+## Training the model
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+
+```r
+results &lt;- model %&gt;% fit(
+    x = mtcars_x,
+    y = mtcars_y,
+    epochs = 10
+)
+```
+
+--
+
+The `epochs` argument defines the number of iterations. Iteration is __passing through the entire dataset once__.
+
+???
+
+Faktyczny trening (dopasowanie modelu do danych) następuje poprzez wywołanie funkcji `fit()` na obiekcie modelu. Przykładowo:
+
+---
+## Looking up training results
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+The final training results can be looked up by printing the object returned by the model `fit()` function.
+
+--
+
+
+```r
+results &lt;- model %&gt;% fit(
+    x = mtcars_x,
+    y = mtcars_y,
+    epochs = 10
+)
+*results
+```
+
+--
+
+```
+Trained on 32 samples (batch_size=32, epochs=10)
+Final epoch (plot to see history):
+loss: 201.6 
+```
+
+---
+## Visualising the training process
+
+.pull-left[
+
+The training process could be __visualised__ by calling the `plot()` function on the object returned by the model `fit()` function.
+
+
+```r
+plot(results)
+```
+]
+
+.pull-right[
+&lt;img src='www/img/mtcars_training_vis.png' width = "100%"/&gt;
+]
+
+---
+class: inverse
+
+### Exercise 2 (15 min)
+
+1.&amp;nbsp;Define the way the network will be trained.
+
+2.&amp;nbsp;Split the data using the `split_data()` function. The result of this function is a list containing the input and output data for both training and test datasets. The input (training) variables should be `latitude` &amp; `longitude`. The output should be `price`.
+
+3.&amp;nbsp; Train the model on 5 epochs using the training dataset and look up the results. 
+
+4.&amp;nbsp; Measure the training time. 
+
+*&amp;nbsp; Remember that the data needs to be a `matrix` not a DataFrame.
+
+---
+## Data split
+
+--
+
+__Machine Learning__ - 80-10-10
+--
+
+- 80% for __training__, 
+- 10% for __validation__,
+- 10% for __testing__.
+
+--
+
+The same split is used in Neural Networks but...
+
+--
+
+If the number of observations is higher that 1M, we can split it 98-1-1.
+
+---
+## Creating a validation set
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+We can use the `validation_split` argument in the `fit()` function to split the data into training and validation.
+
+--
+
+
+```r
+model %&gt;% fit(
+  x = mtcars_x,
+  y = mtcars_y,
+  epochs = 1000,
+* validation_split=0.2
+)
+```
+
+---
+class: inverse
+### Exercise 3 (5 min)
+
+Split the training data further into training (90%) and validation (10%).
+
+Train the model again and look up the results. 
+
+---
+class: inverse, center, middle
+
+# Let's take a short break!
+
+---
+class: inverse
+### Exercise 4 (5 min)
+
+Modify the model to include the all of the continuous variables ('latitude', 'longitude', 'number_of_reviews', 'accommodates', 'beds', 'review_scores_rating').
+
+Train the model again.
+
+Are the results better? What are the values of the metrics now?
+
+---
+class: inverse, middle, center
+# Missing data
+
+---
+## Missing data
+
+The neural network __can not accept__ missing data!
+
+--
+
+In case some data is missing, we should:
+--
+
+- exclude those observations (not recommended),
+
+--
+
+- apply a __data imputation__ method (for example replace missing values with the average).
+
+---
+class: inverse
+### Exercise 5 (10 min)
+
+Inspect the data and get rid of missing values where needed.
+
+Train the model again.
+
+How is the model performing now?
+
+---
+class: inverse, middle, center
+
+# Linearity of the network
+
+---
+## Linearity of the network
+.pull-left[
+- By default the Neural Network is a combination of linear functions.
+]
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+## Linearity of the network
+.pull-left[
+- By default the Neural Network is a combination of linear functions.
+
+- Using multiple linear functions __does not differ to much__ from using a single linear function...
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+## Linearity of the network
+.pull-left[
+- By default the Neural Network is a combination of linear functions.
+
+- Using multiple linear functions __does not differ to much__ from using a single linear function - in both cases the model will search for __linear dependencies__ between variables!
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+
+---
+## Linearity of the network
+.pull-left[
+- By default the Neural Network is a combination of linear functions.
+
+- Using multiple linear functions __does not differ to much__ from using a single linear function - in both cases the model will search for __linear dependencies__ between variables!
+
+- However, the data is usually complex and the relationships between variables __nonlinear__.
+
+]
+
+
+.pull-right[
+&lt;img src='www/img/Warstwy.png' width = "80%"/&gt;
+]
+
+---
+class: inverse, middle, center
+# How to make the network nonlinear?
+
+---
+class: inverse, middle, center
+
+# Using the activation function!
+
+---
+## Activation function
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+The activation function allows to add __nonlinear transformation__ to the results of the calculation of a single neuron.
+]
+
+---
+## Activation function
+
+.pull-left[
+&lt;img src='www/img/Neuron_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+The activation function allows to add __nonlinear transformation__ to the results of the calculation of a single neuron.
+
+The linear function becomes the __argument__ of the activation function `\(a()\)`.
+
+`\(y = a(w_1 * x_1 + w_2 * x_2 + b)\)`
+]
+
+---
+## Activation function
+
+.pull-left[
+&lt;img src='www/img/Neuron_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+Calculated value is used by the neurons in the following layers.
+]
+---
+class: inverse, middle, center
+# Types of the activation functions
+
+---
+## Linear
+.absolute-pull-seven[&lt;img src='www/img/linear.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Typical linear function with values in range of [-Inf, +Inf].
+
+This is the default activation function in Keras.
+]
+
+---
+## Sigmoid 
+.absolute-pull-seven[&lt;img src='www/img/sigmoid.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Values of the _sigmoid_ function range __from 0 to 1__. 
+]
+
+---
+## Tanh
+.absolute-pull-seven[&lt;img src='www/img/tanh.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+Values of the _tanh_ function (Hyperbolic Tangent) range from __-1 to 1__.
+]
+---
+## ReLU
+.absolute-pull-seven[&lt;img src='www/img/relu.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+The _ReLU_ function is one of the __most popular__ activation functions used in neural networks.
+]
+
+---
+## ReLU
+.absolute-pull-seven[&lt;img src='www/img/relu.png' width = "80%"/&gt;]
+
+.absolute-pull-three[
+The _ReLu_ function is one of the __most popular__ activation functions used in neural networks.
+
+Using _ReLU_ solves most of the problems caused by _sigmoid_ and _tanh_. Read more &lt;a href = "https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0" target = "blank"&gt;here&lt;/a&gt;.
+]
+
+
+---
+class: inverse, middle, center
+
+# Which activation function to choose?
+
+---
+## Activation function and network layers
+
+.pull-left[
+&lt;img src='www/img/activation_input.png' width = "80%"/&gt;
+]
+
+.pull-right[
+In case of the hidden layers, we use functions that works on __each neuron separately__.
+]
+---
+## Activation function and network layers
+
+.pull-left[
+&lt;img src='www/img/activation_hidden.png' width = "80%"/&gt;
+]
+
+.pull-right[
+In case of the hidden layers, we use functions that works on __each neuron separately__.
+
+__ReLU__ is a popular choice.
+
+]
+
+---
+## Activation function and network layers
+
+.pull-left[
+&lt;img src='www/img/activation_output.png' width = "80%"/&gt;
+]
+
+.pull-right[
+In case of the hidden layers, we use functions that works on __each neuron separately__.
+
+__ReLU__ is a popular choice.
+
+The activation function on the __output layer__ depends on the __type of problem__ we're trying to solve.
+]
+
+---
+## Type of output and the activation function
+
+__Binary classification__:
+
+- `sigmoid` - predicted value in range of [0,1]
+
+--
+
+__Multi class classification__:
+
+- `softmax` - The sum of the predicted values equal to one.
+
+--
+
+&amp;nbsp;__Regression__:
+
+- `linear` - We predict a single number on continuous scale.
+
+---
+class: inverse, middle, center
+
+# Quiz
+### Which activation function to choose on the output layer
+---
+class: inverse, middle, center
+
+## Detecting spam emails
+
+---
+class: inverse, middle, center
+
+## Predicting air temperature
+
+---
+class: inverse, middle, center
+
+## Classification of dogs, cats and birds in images
+
+
+---
+class: inverse, middle, center
+# The activation function in Keras
+
+---
+## Activation function
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+_Using the activation layer:_
+
+.super-small-code[
+
+```r
+model %&gt;% 
+  layer_dense(units = 1000, input_shape = 3) %&gt;% 
+  activation_relu() %&gt;% 
+  layer_dense(units = 1) %&gt;% 
+  activation_sigmoid()
+```
+]
+
+--
+
+_Using the activation argument:_
+
+.super-small-code[
+
+```r
+model %&gt;% 
+  layer_dense(units = 1000, input_shape = 3, activation = "relu") %&gt;% 
+  layer_dense(units = 1, activation = "sigmoid") %&gt;% 
+```
+]
+
+---
+class: inverse
+### Exercise 6 (10 min)
+
+1.&amp;nbsp;Add two additional dense layers of size 128 and 32 to the existing architecture.
+
+--
+
+2.&amp;nbsp;Add proper activation functions.
+
+--
+
+3.&amp;nbsp;Train the model __from scratch__ on 10 epochs. Do you see the difference in results?
+
+---
+class: inverse, middle, center
+# Data preparation
+
+---
+## Data preparation
+
+In comparison to some Machine Learning algorithms, Deep Neural Networks can figure out complex __dependencies between variables__ on it's own.
+
+--
+
+We don't need need to do __feature engineering__ manually! 
+
+--
+
+However, proper data preparation might help to __train significantly faster__ and in some cases reach __better performance__.
+
+---
+## Data normalization
+
+
+&lt;center&gt;&lt;img src='www/img/standaryzacja.png' width = "120%"/&gt;&lt;/center&gt;
+
+---
+## Data normalization
+
+.pull-left[
+Normalization is an __important step__ for training Neural Networks.
+]
+
+--
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+&lt;br/&gt;
+
+`\({x_i - min(x) \over max(x) - min(x)}\)`
+]
+
+
+---
+## Data normalization
+
+.pull-left[
+Normalization is an __important step__ for training Neural Networks.
+
+The data that is not normalized could results in __slow and unstable training__.
+]
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+&lt;br/&gt;
+
+`\({x_i - min(x) \over max(x) - min(x)}\)`
+]
+
+---
+## Data normalization
+
+.pull-left[
+Normalization is an __important step__ for training Neural Networks.
+
+The data that is not normalized could results in __slow and unstable training__.
+
+In case of a regression problem __scaling__ is __necessary__...
+]
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+&lt;br/&gt;
+
+`\({x_i - min(x) \over max(x) - min(x)}\)`
+]
+
+
+---
+## Data normalization
+
+.pull-left[
+Normalization is an __important step__ for training Neural Networks.
+
+The data that is not normalized could results in __slow and unstable training__.
+
+In case of a regression problem __scaling__ is __necessary__...
+
+...If the data is not scaled, the training could fail.
+]
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+&lt;br/&gt;
+
+`\({x_i - min(x) \over max(x) - min(x)}\)`
+]
+
+---
+## Data normalization
+
+.pull-left[
+If a variable is __normally distributed__, we should standardize.
+]
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+]
+
+---
+## Data normalization
+
+.pull-left[
+If a variable is __normally distributed__, we should standardize.
+
+Otherwise we should __normalize__.
+]
+
+.pull-right.center.text-middle[
+`\({x_i - mean(x) \over std(x)}\)`
+
+`\({x_i - min(x) \over max(x) - min(x)}\)`
+]
+
+???
+
+If the quantity values are small (near 0-1) and the distribution is limited (e.g. standard deviation near 1) then perhaps you can get away with no scaling of the data.
+
+---
+## How to code standardization in R?
+
+--
+
+.small-code[
+
+```r
+library(caret)
+
+# Calculating of the mean and std dev.
+scaler &lt;- preProcess(
+  train_x,
+  method = c("center", "scale")
+)
+```
+]
+
+---
+## How to code standardization in R
+
+.small-code[
+
+```r
+library(caret)
+
+# Calculating of the mean and std dev.
+scaler &lt;- preProcess(
+  train_x,
+  method = c("center", "scale")
+)
+
+# Scaling the train set
+train_x_scaled &lt;- predict(scaler, train_x)
+```
+]
+
+---
+## How to code standardization in R
+
+.small-code[
+
+```r
+library(caret)
+
+# Calculating of the mean and std dev.
+scaler &lt;- preProcess(
+  train_x,
+  method = c("center", "scale")
+)
+
+# Scaling the train set
+train_x_scaled &lt;- predict(scaler, train_x)
+
+# Scaling the test set with the scaler based on the training set
+test_x_scaled &lt;- predict(scaler, test_x)
+```
+]
+
+---
+## How to code __normalization__ in R
+
+
+.small-code[
+
+```r
+library(caret)
+
+# Calculating of the mean and std dev.
+scaler &lt;- preProcess(
+  train_x,
+* method = c("range"),
+* rangeBounds = c(0, 1)
+)
+
+# Scaling the train set
+train_x_scaled &lt;- predict(scaler, train_x)
+
+# Scaling the test set with the scaler based on the training set
+test_x_scaled &lt;- predict(scaler, test_x)
+```
+]
+
+---
+class: inverse
+
+### Exercise 7 (10 min)
+
+1.&amp;nbsp;Apply transformation of the input data so that the training is not only possible, but optimal.
+
+--
+
+2.&amp;nbsp;Train the model __from scratch__ on 10 epochs. Is there a difference in performance?
+
+*&amp;nbsp;You can try training on larger number of epochs and see if this improves the results.
+
+---
+class: middle, center
+&lt;img src='www/img/nn_workflow_4_eng.png' width = "100%"/&gt;
+
+---
+## Model evaluation
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+.text22[
+After training the model we need to __verify it's performance__ on the test set.
+]
+
+--
+
+.text22[
+This can be done using the `evaluate()` function.
+]
+
+
+--
+
+.small-code[
+
+```python
+model %&gt;% 
+  evaluate(
+    x = mtcars_test_x, # Test input
+    y = mtcars_test_y # Test output
+  )
+# $loss
+#     205.644515991211
+# $mean_absolute_error
+#     11.4261779785156
+```
+]
+
+---
+class: middle, center
+&lt;img src='www/img/nn_workflow_5_eng.png' width = "100%"/&gt;
+
+---
+## Making predictions
+
+&lt;div class="keras-header"&gt;&lt;/div&gt;
+
+To generate predictions one can use the `predict()` function.
+
+--
+
+
+```python
+model %&gt;% 
+  predict(mtcars_test_x)
+```
+
+--
+
+This will return a matrix with one column and number of rows equal to the length of the input dataset.
+
+---
+class: inverse
+### Exercise 8 (5 min)
+
+Verify the model on the test data.
+
+How different are the values for the metrics on the test set comparing to the metrics on the validation set?
+
+---
+## How to build a well working Neural Network
+
+--
+
+The process itself is a series of __experiments__. There is __no recipe__ that will work on every dataset.
+
+--
+
+You can experiment with:
+
+--
+
+- number of layers, neurons,
+--
+
+- number of `epochs`,
+--
+
+- batch size,
+--
+
+- activation functions,
+--
+
+- optimization algorithms,
+--
+
+- loss functions.
+
+--
+
+It's very important to remember about using the proper activation function for the output layer (depending on the type of a problem).
+
+---
+class: inverse, middle, center
+
+# Summary
+
+---
+## Summary
+
+- We've just learned what is a Neural Network and __Deep Learning__.
+
+--
+
+- Based on the Keras R library, we've build a __working model__ predicting the property prices.
+
+--
+
+- However, it's good to remember that in practice the benefits of Deep Learning can be seen only when the __data volume is much bigger__ and the __problem itself it more complex__.
+
+--
+
+- Even though, we believe that because of the simplicity of the provided example, we've convinced you that __learning Deep Learning techniques are not as hard as they could be perceived__. 
+
+---
+class: inverse, bottom, center
+background-image: url('www/img/logo_white.png')
+background-size: 50%
+
+mb@idash.pl mo@idash.pl
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
