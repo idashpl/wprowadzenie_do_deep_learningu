@@ -202,7 +202,7 @@ Calculation for a single neuron looks like this:
 ]
 
 .pull-right[
-This function takes the weights from the previous layer, multiplies it by a given __weights__ and adds the results together.
+This function takes the values from the previous layer, multiplies it by a given __weights__ and adds the results together.
 
 Calculation for a single neuron looks like this:
 
@@ -482,7 +482,7 @@ model &lt;- keras_model_sequential()
 *model %&gt;%
 * layer_dense(
 *   units = 4,
-*   input_dim = 2
+*   input_shape = 2
 * ) %&gt;% 
   layer_dense(units = 4)
   layer_dense(units = 1)
@@ -508,7 +508,7 @@ model &lt;- keras_model_sequential()
 model %&gt;%
   layer_dense(
     units = 4,
-    input_dim = 2
+    input_shape = 2
   ) %&gt;% 
 * layer_dense(units = 4)
   layer_dense(units = 1)
@@ -535,7 +535,7 @@ model &lt;- keras_model_sequential()
 model %&gt;%
   layer_dense(
     units = 4,
-    input_dim = 2
+    input_shape = 2
   ) %&gt;% 
   layer_dense(units = 4)
 * layer_dense(units = 1)
@@ -766,8 +766,6 @@ class: inverse
 2.&amp;nbsp;Split the data using the `split_data()` function. The result of this function is a list containing the input and output data for both training and test datasets. The input (training) variables should be `latitude` &amp; `longitude`. The output should be `price`.
 
 3.&amp;nbsp; Train the model on 5 epochs using the training dataset and look up the results. 
-
-4.&amp;nbsp; Measure the training time. 
 
 *&amp;nbsp; Remember that the data needs to be a `matrix` not a DataFrame.
 
